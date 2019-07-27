@@ -1,31 +1,33 @@
-
-/**
- * Copyright (c) 2001-2019 Mathew A. Nelson and Robocode contributors
+/*******************************************************************************
+ * Copyright (c) 2001, 2008 Mathew A. Nelson and Robocode contributors
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
+ * are made available under the terms of the Common Public License v1.0
  * which accompanies this distribution, and is available at
- * https://robocode.sourceforge.io/license/epl-v10.html
- */
+ * http://robocode.sourceforge.net/license/cpl-v10.html
+ *
+ * Contributors:
+ *     Mathew A. Nelson
+ *     - Initial implementation
+ *     Flemming N. Larsen
+ *     - Maintainance
+ *******************************************************************************/
 
 
-//import robocode.HitByBulletEvent;
+
 import robocode.HitRobotEvent;
-//import robocode.Robot;
-import robocode.ScannedRobotEvent;
-//import static robocode.util.Utils.normalRelativeAngleDegrees;
 import robocode.AlphaBot;
+import robocode.ScannedRobotEvent;
+
 import java.awt.*;
 
 
 /**
- * Fire - a sample robot by Mathew Nelson, and maintained.
- * <p>
- * Sits still. Spins gun around. Moves when hit.
- *
- * @author Mathew A. Nelson (original)
- * @author Flemming N. Larsen (contributor)
+ * Walls - a sample robot by Mathew Nelson, and maintained by Flemming N. Larsen
+ * <p/>
+ * Moves around the outer edge with the gun facing in.
  */
-public class Kodeura extends AlphaBot {
+public class kodeura2 extends AlphaBot {
+
 	boolean peek; // Don't turn if there's a robot there
 	double moveAmount; // How much to move
 
@@ -34,7 +36,7 @@ public class Kodeura extends AlphaBot {
 	 */
 	public void run() {
 		// Set colors
-		setBodyColor(Color.red);
+		setBodyColor(Color.black);
 		setGunColor(Color.black);
 		setRadarColor(Color.orange);
 		setBulletColor(Color.cyan);
@@ -84,7 +86,7 @@ public class Kodeura extends AlphaBot {
 	 * onScannedRobot:  Fire!
 	 */
 	public void onScannedRobot(ScannedRobotEvent e) {
-		fire(5);
+		fire(2);
 		// Note that scan is called automatically when the robot is moving.
 		// By calling it manually here, we make sure we generate another scan event if there's a robot on the next
 		// wall, so that we do not start moving up it until it's gone.
