@@ -1,33 +1,31 @@
-/*******************************************************************************
- * Copyright (c) 2001, 2008 Mathew A. Nelson and Robocode contributors
+
+/**
+ * Copyright (c) 2001-2019 Mathew A. Nelson and Robocode contributors
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Common Public License v1.0
+ * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://robocode.sourceforge.net/license/cpl-v10.html
- *
- * Contributors:
- *     Mathew A. Nelson
- *     - Initial implementation
- *     Flemming N. Larsen
- *     - Maintainance
- *******************************************************************************/
+ * https://robocode.sourceforge.io/license/epl-v10.html
+ */
 
 
-
+//import robocode.HitByBulletEvent;
 import robocode.HitRobotEvent;
-import robocode.AlphaBot;
+//import robocode.Robot;
 import robocode.ScannedRobotEvent;
-
+//import static robocode.util.Utils.normalRelativeAngleDegrees;
+import robocode.AlphaBot;
 import java.awt.*;
 
 
 /**
- * Walls - a sample robot by Mathew Nelson, and maintained by Flemming N. Larsen
- * <p/>
- * Moves around the outer edge with the gun facing in.
+ * Fire - a sample robot by Mathew Nelson, and maintained.
+ * <p>
+ * Sits still. Spins gun around. Moves when hit.
+ *
+ * @author Mathew A. Nelson (original)
+ * @author Flemming N. Larsen (contributor)
  */
-public class kodeura2 extends AlphaBot {
-
+public class Kodeura extends AlphaBot {
 	boolean peek; // Don't turn if there's a robot there
 	double moveAmount; // How much to move
 
@@ -36,7 +34,7 @@ public class kodeura2 extends AlphaBot {
 	 */
 	public void run() {
 		// Set colors
-		setBodyColor(Color.black);
+		setBodyColor(Color.red);
 		setGunColor(Color.black);
 		setRadarColor(Color.orange);
 		setBulletColor(Color.cyan);
@@ -68,6 +66,18 @@ public class kodeura2 extends AlphaBot {
 			turnRight(90);
 		}
 	}
+	
+	
+ 
+    // ... aiming code ...
+ 
+    setTurnGunRight(...);
+    // Don't need to check whether gun turn will complete in single turn because
+    // we check that gun is finished turning before calling setFire(...).
+    // This is simpler since the precise angle your gun can move in one tick
+    // depends on where your robot is turning.
+    fireTime = getTime() + 1;
+}
 
 	/**
 	 * onHitRobot:  Move away a bit.
@@ -81,12 +91,15 @@ public class kodeura2 extends AlphaBot {
 			ahead(100);
 		}
 	}
+	
+	public boolean getHideEnemyNames()
+	Returns true if the enemy names are hidden, i.e. anonymous; false otherwise.
 
 	/**
 	 * onScannedRobot:  Fire!
 	 */
 	public void onScannedRobot(ScannedRobotEvent e) {
-		fire(2);
+		fire(5);
 		// Note that scan is called automatically when the robot is moving.
 		// By calling it manually here, we make sure we generate another scan event if there's a robot on the next
 		// wall, so that we do not start moving up it until it's gone.
