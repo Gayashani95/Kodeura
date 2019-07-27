@@ -1,19 +1,10 @@
 
-/**
- * Copyright (c) 2001-2019 Mathew A. Nelson and Robocode contributors
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * https://robocode.sourceforge.io/license/epl-v10.html
- */
-
-
-//import robocode.HitByBulletEvent;
+import robocode.HitByBulletEvent;
 import robocode.HitRobotEvent;
-//import robocode.Robot;
+import robocode.CharlieBot;
 import robocode.ScannedRobotEvent;
-//import static robocode.util.Utils.normalRelativeAngleDegrees;
-import robocode.BravoBot;
+import static robocode.util.Utils.normalRelativeAngleDegrees;
+
 import java.awt.*;
 
 
@@ -25,21 +16,23 @@ import java.awt.*;
  * @author Mathew A. Nelson (original)
  * @author Flemming N. Larsen (contributor)
  */
-public class Kodeura extends BravoBot {
+public class Kodeura extends CharlieBot {
+	int dist = 100; // distance to move when we're hit
 	boolean peek; // Don't turn if there's a robot there
 	double moveAmount; // How much to move
-
+	int turnDirection = 1;
 	/**
-	 * run: Move around the walls
+	 * run:  Fire's main run function
 	 */
 	public void run() {
 		// Set colors
-		setBodyColor(Color.red);
-		setGunColor(Color.black);
-		setRadarColor(Color.orange);
-		setBulletColor(Color.cyan);
-		setScanColor(Color.cyan);
-
+		setBodyColor(Color.orange);
+		setGunColor(Color.orange);
+		setRadarColor(Color.red);
+		setScanColor(Color.red);
+		setBulletColor(Color.red);
+	
+		// Spin the gun around slowly... forever
 		// Initialize moveAmount to the maximum possible for this battlefield.
 		moveAmount = Math.max(getBattleFieldWidth(), getBattleFieldHeight());
 		// Initialize peek to false
@@ -52,9 +45,8 @@ public class Kodeura extends BravoBot {
 		ahead(moveAmount);
 		// Turn the gun to turn right 90 degrees.
 		peek = true;
-		turnGunRight(90);
+		turnGunRight(270);
 		turnRight(90);
-		ahead(100);
 
 		while (true) {
 			// Look before we turn when ahead() completes.
@@ -64,13 +56,46 @@ public class Kodeura extends BravoBot {
 			// Don't look now
 			peek = false;
 			// Turn to the next wall
-			turnRight(90);
+			turnRight(-90); 
+			turnGunRight(-270);
 		}
+
 	}
-	
 
 	/**
-	 * onHitRobot:  Move away a bit.
+	 * onScannedRobot:  Fire!
+	 */
+	public void onRobotDetected(ScannedRobotEvent e) {
+		// If the other robot is close by, and we have plenty of life,
+		// fire hard!
+		if (e.getDistance() < 200 && getEnergy() > 10) {
+			turnGunRight(180);
+			fire(3);
+			
+		} // otherwise, fire 1.
+		else {
+			turnGunRight(180);
+			fire(3);
+		}
+		// Call scan again, before we turn the gun
+		if (peek) {
+			scan();
+		}
+	}
+
+	/**
+	 * onHitByBullet:  Turn perpendicular to the bullet, and move a bit.
+	 */
+	public void onHitByBullet(HitByBulletEvent e) {
+		turnRight(normalRelativeAngleDegrees(90 - (getHeading() - e.getHeading())));
+
+		ahead(dist);
+		dist *= -1;
+		scan();
+	}
+
+	/**
+	 * onHitRobot:  Aim at it.  Fire Hard!
 	 */
 	public void onHitRobot(HitRobotEvent e) {
 		// If he's in front of us, set back up a bit.
@@ -80,17 +105,5 @@ public class Kodeura extends BravoBot {
 		else {
 			ahead(100);
 		}
-	}
-	
-
-	/**
-	 * onScannedRobot:  Fire!
-	 */
-	public void onScannedRobot(ScannedRobotEvent e) {
-		if (e.getDistance() < 100) {
-           fire(3);
-       } else {
-           fire(3);
-       }
 	}
 }
