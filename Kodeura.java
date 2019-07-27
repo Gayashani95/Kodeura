@@ -13,7 +13,7 @@ import robocode.HitRobotEvent;
 //import robocode.Robot;
 import robocode.ScannedRobotEvent;
 //import static robocode.util.Utils.normalRelativeAngleDegrees;
-import robocode.AlphaBot;
+import robocode.BravoBot;
 import java.awt.*;
 
 
@@ -25,7 +25,7 @@ import java.awt.*;
  * @author Mathew A. Nelson (original)
  * @author Flemming N. Larsen (contributor)
  */
-public class Kodeura extends AlphaBot {
+public class Kodeura extends BravoBot {
 	boolean peek; // Don't turn if there's a robot there
 	double moveAmount; // How much to move
 
@@ -54,6 +54,7 @@ public class Kodeura extends AlphaBot {
 		peek = true;
 		turnGunRight(90);
 		turnRight(90);
+		ahead(100);
 
 		while (true) {
 			// Look before we turn when ahead() completes.
@@ -67,17 +68,6 @@ public class Kodeura extends AlphaBot {
 		}
 	}
 	
-	
- 
-    // ... aiming code ...
- 
-    setTurnGunRight(...);
-    // Don't need to check whether gun turn will complete in single turn because
-    // we check that gun is finished turning before calling setFire(...).
-    // This is simpler since the precise angle your gun can move in one tick
-    // depends on where your robot is turning.
-    fireTime = getTime() + 1;
-}
 
 	/**
 	 * onHitRobot:  Move away a bit.
@@ -92,19 +82,15 @@ public class Kodeura extends AlphaBot {
 		}
 	}
 	
-	//public boolean getHideEnemyNames()
-	//Returns true if the enemy names are hidden, i.e. anonymous; false otherwise.
 
 	/**
 	 * onScannedRobot:  Fire!
 	 */
 	public void onScannedRobot(ScannedRobotEvent e) {
-		fire(5);
-		// Note that scan is called automatically when the robot is moving.
-		// By calling it manually here, we make sure we generate another scan event if there's a robot on the next
-		// wall, so that we do not start moving up it until it's gone.
-		if (peek) {
-			scan();
-		}
+		if (e.getDistance() < 100) {
+           fire(3);
+       } else {
+           fire(3);
+       }
 	}
 }
