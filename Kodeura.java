@@ -92,8 +92,8 @@ public class Kodeura extends AlphaBot {
 		}
 	}
 	
-	public boolean getHideEnemyNames()
-	Returns true if the enemy names are hidden, i.e. anonymous; false otherwise.
+	//public boolean getHideEnemyNames()
+	//Returns true if the enemy names are hidden, i.e. anonymous; false otherwise.
 
 	/**
 	 * onScannedRobot:  Fire!
